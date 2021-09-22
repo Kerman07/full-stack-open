@@ -1,2 +1,2 @@
-# full-stack-open
-Full Stack Open 2021
+# Full Stack Open 2021
+Repository for the online course from the University of Helsinki

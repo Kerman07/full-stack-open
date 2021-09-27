@@ -1,6 +1,6 @@
 import CountryDetail from "./CountryDetail";
 
-const Country = ({ countries }) => {
+const Country = ({ countries, onClick }) => {
   let n = countries.length;
 
   if (n > 10) {
@@ -8,9 +8,16 @@ const Country = ({ countries }) => {
   } else if (n > 1) {
     return (
       <>
-        {countries.map((country) => (
-          <div key={country.numericCode}>{country.name}</div>
-        ))}
+        {countries.map((country) => {
+          return (
+            <div key={country.numericCode}>
+              {country.name}{" "}
+              <button onClick={onClick} value={country.name}>
+                show
+              </button>
+            </div>
+          );
+        })}
       </>
     );
   } else if (n === 1) {

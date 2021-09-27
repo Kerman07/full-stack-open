@@ -11,9 +11,13 @@ const App = () => {
     axios.get("https://restcountries.com/v2/all").then((response) => {
       setCountries(response.data);
     });
-  }, []);
+  }, [newFilter]);
 
   const handleFilter = (event) => setNewFilter(event.target.value);
+  const handleClick = (event) =>
+    setCountries(
+      countries.filter((country) => country.name === event.target.value)
+    );
 
   return (
     <div>
@@ -23,6 +27,7 @@ const App = () => {
           countries={countries.filter((country) =>
             country.name.toLowerCase().includes(newFilter.toLowerCase())
           )}
+          onClick={handleClick}
         />
       ) : (
         <div>Too many matches, specify another filter</div>

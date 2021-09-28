@@ -10,7 +10,7 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [newFilter, setNewFilter] = useState("");
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState([null, null]);
 
   useEffect(() => {
     personService.getAll().then((response) => {
@@ -25,24 +25,39 @@ const App = () => {
     if (isFound) {
       if (
         window.confirm(
-          `${newName} is already added to phonebook, replace the old number with a new one ?`
+          `${newName} is already added to the phonebook, replace the old number with a new one ?`
         )
       )
-        personService.updatePerson(isFound.id, newObject).then((response) => {
-          setErrorMessage(`Updated the number of ${response.name}`);
-          setTimeout(() => setErrorMessage(null), 5000);
-          setPersons(
-            persons.map((person) =>
-              person.name === newName ? response : person
-            )
-          );
-          setNewName("");
-          setNewNumber("");
-        });
+        personService
+          .updatePerson(isFound.id, newObject)
+          .then((response) => {
+            setErrorMessage([
+              `Updated the number of ${response.name}`,
+              "success",
+            ]);
+            setTimeout(() => setErrorMessage([null, null]), 5000);
+            setPersons(
+              persons.map((person) =>
+                person.name === newName ? response : person
+              )
+            );
+            setNewName("");
+            setNewNumber("");
+          })
+          .catch(() => {
+            setErrorMessage([
+              `Information of ${isFound.name} has already been removed from server`,
+              "failure",
+            ]);
+            setTimeout(() => setErrorMessage([null, null]), 5000);
+            setPersons(persons.filter((per) => per.id !== isFound.id));
+            setNewName("");
+            setNewNumber("");
+          });
     } else {
       personService.create(newObject).then((response) => {
-        setErrorMessage(`Added ${response.name}`);
-        setTimeout(() => setErrorMessage(null), 5000);
+        setErrorMessage([`Added ${response.name}`, "success"]);
+        setTimeout(() => setErrorMessage([null, null]), 5000);
         setPersons(persons.concat(response));
         setNewName("");
         setNewNumber("");
@@ -64,7 +79,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={errorMessage} className="success" />
+      <Notification message={errorMessage} />
       filter shown with <Filter onChange={handleFilter} value={newFilter} />
       <h3>Add a new entry</h3>
       <PersonForm

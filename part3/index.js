@@ -3,9 +3,17 @@ const app = express();
 const morgan = require("morgan");
 
 const MAX = 100000;
-
 app.use(express.json());
-app.use(morgan("tiny"));
+
+morgan.token("data", (request, response) => {
+  if (request.body.name)
+    return JSON.stringify({ name: request.body.name, number: request.body.number });
+  return null;
+});
+
+app.use(
+  morgan(":method :url :status :res[content-length] - :response-time ms :data")
+);
 
 let persons = [
   {

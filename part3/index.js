@@ -6,6 +6,7 @@ const app = express();
 const MAX = 100000;
 
 app.use(express.json());
+app.use(express.static("build"));
 app.use(cors());
 
 morgan.token("data", (request, response) => {

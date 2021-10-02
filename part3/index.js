@@ -1,13 +1,18 @@
 const express = require("express");
 const app = express();
 const morgan = require("morgan");
+const cors = require("cors");
 
 const MAX = 100000;
 app.use(express.json());
+app.use(cors());
 
 morgan.token("data", (request, response) => {
   if (request.body.name)
-    return JSON.stringify({ name: request.body.name, number: request.body.number });
+    return JSON.stringify({
+      name: request.body.name,
+      number: request.body.number,
+    });
   return null;
 });
 

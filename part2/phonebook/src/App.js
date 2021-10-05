@@ -44,15 +44,9 @@ const App = () => {
             setNewName("");
             setNewNumber("");
           })
-          .catch(() => {
-            setErrorMessage([
-              `Information of ${isFound.name} has already been removed from server`,
-              "failure",
-            ]);
+          .catch((error) => {
+            setErrorMessage([error.response.data.error, "failure"]);
             setTimeout(() => setErrorMessage([null, null]), 5000);
-            setPersons(persons.filter((per) => per.id !== isFound.id));
-            setNewName("");
-            setNewNumber("");
           });
     } else {
       personService

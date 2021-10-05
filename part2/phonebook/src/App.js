@@ -55,13 +55,19 @@ const App = () => {
             setNewNumber("");
           });
     } else {
-      personService.create(newObject).then((response) => {
-        setErrorMessage([`Added ${response.name}`, "success"]);
-        setTimeout(() => setErrorMessage([null, null]), 5000);
-        setPersons(persons.concat(response));
-        setNewName("");
-        setNewNumber("");
-      });
+      personService
+        .create(newObject)
+        .then((response) => {
+          setErrorMessage([`Added ${response.name}`, "success"]);
+          setTimeout(() => setErrorMessage([null, null]), 5000);
+          setPersons(persons.concat(response));
+          setNewName("");
+          setNewNumber("");
+        })
+        .catch((error) => {
+          setErrorMessage([error.response.data.error, "failure"]);
+          setTimeout(() => setErrorMessage([null, null]), 5000);
+        });
     }
   };
 

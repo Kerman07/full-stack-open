@@ -24,10 +24,10 @@ if (len > 3) {
   const name = process.argv[3];
   const number = process.argv[4];
   const newPerson = new Person({
-    name: name,
-    number: number,
+    name,
+    number,
   });
-  newPerson.save().then((res) => {
+  newPerson.save().then(() => {
     console.log(`Added ${name} number ${number} to phonebook`);
     mongoose.connection.close();
     process.exit(0);

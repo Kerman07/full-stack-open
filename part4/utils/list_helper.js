@@ -1,3 +1,5 @@
+const _ = require("lodash/collection");
+
 const dummy = (blogs) => {
   return 1;
 };
@@ -13,4 +15,12 @@ const favoriteBlog = (blogs) => {
   return blogs[0];
 };
 
-module.exports = { dummy, totalLikes, favoriteBlog };
+const mostBlogs = (blogs) => {
+  if (blogs.length === 0) return null;
+  let grouped = _.countBy(blogs, "author");
+  let group_array = Object.keys(grouped).map((key) => [key, grouped[key]]);
+  group_array.sort((a, b) => b[1] - a[1]);
+  return { author: group_array[0][0], blogs: group_array[0][1] };
+};
+
+module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs };

@@ -109,3 +109,23 @@ describe("most liked tests", () => {
     expect(listHelper.favoriteBlog(listWithManyBlogs)).toEqual(mostLiked);
   });
 });
+
+describe("author with most blogs tests", () => {
+  test("most blogs of empty blog list returns null", () => {
+    expect(listHelper.mostBlogs([])).toEqual(null);
+  });
+
+  test("most blogs of one blog returns that author", () => {
+    expect(listHelper.mostBlogs(listWithOneBlog)).toEqual({
+      author: listWithOneBlog[0].author,
+      blogs: 1,
+    });
+  });
+
+  test("most liked of many blogs is returned correctly", () => {
+    expect(listHelper.mostBlogs(listWithManyBlogs)).toEqual({
+      author: "Robert C. Martin",
+      blogs: 3,
+    });
+  });
+});

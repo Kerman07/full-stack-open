@@ -85,7 +85,7 @@ describe("total likes", () => {
   });
 });
 
-describe("most liked tests", () => {
+describe("most liked blog tests", () => {
   const mostLiked = {
     _id: "5a422b3a1b54a676234d17f9",
     title: "Canonical string reduction",
@@ -111,21 +111,41 @@ describe("most liked tests", () => {
 });
 
 describe("author with most blogs tests", () => {
-  test("most blogs of empty blog list returns null", () => {
+  test("most blogs author of empty blog list returns null", () => {
     expect(listHelper.mostBlogs([])).toEqual(null);
   });
 
-  test("most blogs of one blog returns that author", () => {
+  test("most blogs author of one blog returns that author", () => {
     expect(listHelper.mostBlogs(listWithOneBlog)).toEqual({
       author: listWithOneBlog[0].author,
       blogs: 1,
     });
   });
 
-  test("most liked of many blogs is returned correctly", () => {
+  test("most blogs author of many blogs is returned correctly", () => {
     expect(listHelper.mostBlogs(listWithManyBlogs)).toEqual({
       author: "Robert C. Martin",
       blogs: 3,
+    });
+  });
+});
+
+describe("author with most likes tests", () => {
+  test("most liked author of empty blog list returns null", () => {
+    expect(listHelper.mostLiked([])).toEqual(null);
+  });
+
+  test("most liked author of one blog returns that author", () => {
+    expect(listHelper.mostLiked(listWithOneBlog)).toEqual({
+      author: listWithOneBlog[0].author,
+      likes: listWithOneBlog[0].likes,
+    });
+  });
+
+  test("most liked author of many blogs is returned correctly", () => {
+    expect(listHelper.mostLiked(listWithManyBlogs)).toEqual({
+      author: "Edsger W. Dijkstra",
+      likes: 17,
     });
   });
 });

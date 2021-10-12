@@ -23,4 +23,18 @@ const mostBlogs = (blogs) => {
   return { author: group_array[0][0], blogs: group_array[0][1] };
 };
 
-module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs };
+const mostLiked = (blogs) => {
+  if (blogs.length === 0) return null;
+  let grouped = _.groupBy(blogs, "author");
+  let authorsWithLikes = [];
+  for (const author in grouped) {
+    authorsWithLikes.push([
+      author,
+      grouped[author].reduce((suma, cur) => suma + cur.likes, 0),
+    ]);
+  }
+  authorsWithLikes.sort((a, b) => b[1] - a[1]);
+  return { author: authorsWithLikes[0][0], likes: authorsWithLikes[0][1] };
+};
+
+module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs, mostLiked };

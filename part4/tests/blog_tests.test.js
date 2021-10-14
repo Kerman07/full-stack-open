@@ -23,6 +23,12 @@ test("all blogs are returned in json format", async () => {
   expect(blogs.body).toHaveLength(helper.initialBlogs.length);
 });
 
+test("the unique identifier property of the blog posts is named id", async () => {
+  const blogs = await helper.getAllBlogs();
+  const blogToTest = blogs[0];
+  expect(blogToTest.id).toBeDefined();
+});
+
 afterAll(() => {
   mongoose.connection.close();
 });

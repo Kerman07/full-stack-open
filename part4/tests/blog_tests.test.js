@@ -42,6 +42,17 @@ test("new blog post is saved successfully", async () => {
   expect(newBlog.url).toEqual(returnedBlog.body.url);
 });
 
+test("if likes property is missing from request it will default to 0", async () => {
+    const newBlog = { title: "test", author: "test", url: "test"};
+    const returnedBlog = await api
+      .post("/api/blogs")
+      .send(newBlog)
+      .expect(201)
+      .expect("Content-Type", /application\/json/);
+  
+    expect(returnedBlog.body.likes).toBe(0);
+  });
+
 afterAll(() => {
   mongoose.connection.close();
 });

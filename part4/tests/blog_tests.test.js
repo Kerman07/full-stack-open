@@ -29,6 +29,19 @@ test("the unique identifier property of the blog posts is named id", async () =>
   expect(blogToTest.id).toBeDefined();
 });
 
+test("new blog post is saved successfully", async () => {
+  const newBlog = { title: "test", author: "test", url: "test", likes: 1 };
+  const returnedBlog = await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(201)
+    .expect("Content-Type", /application\/json/);
+
+  const blogsAfter = await helper.getAllBlogs();
+  expect(blogsAfter).toHaveLength(helper.initialBlogs.length + 1);
+  expect(newBlog.url).toEqual(returnedBlog.body.url);
+});
+
 afterAll(() => {
   mongoose.connection.close();
 });

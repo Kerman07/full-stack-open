@@ -76,6 +76,22 @@ describe("deleting a blog post", () => {
   });
 });
 
+describe("updating a blog post", () => {
+  test("works with a valid id", async () => {
+    const blogs = await helper.getAllBlogs();
+    const blogToUpdate = blogs[0];
+
+    const update = { likes: 35 };
+    const returnedBlog = await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(update)
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+
+    expect(returnedBlog.body.likes).toBe(35);
+  });
+});
+
 afterAll(() => {
   mongoose.connection.close();
 });

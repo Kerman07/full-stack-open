@@ -43,15 +43,24 @@ test("new blog post is saved successfully", async () => {
 });
 
 test("if likes property is missing from request it will default to 0", async () => {
-    const newBlog = { title: "test", author: "test", url: "test"};
-    const returnedBlog = await api
-      .post("/api/blogs")
-      .send(newBlog)
-      .expect(201)
-      .expect("Content-Type", /application\/json/);
-  
-    expect(returnedBlog.body.likes).toBe(0);
-  });
+  const newBlog = { title: "test", author: "test", url: "test" };
+  const returnedBlog = await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(201)
+    .expect("Content-Type", /application\/json/);
+
+  expect(returnedBlog.body.likes).toBe(0);
+});
+
+test("if title and url properties are missing from request it will respond with status 400", async () => {
+  const newBlog = { author: "test", likes: 5 };
+  await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(400)
+    .expect("Content-Type", /application\/json/);
+});
 
 afterAll(() => {
   mongoose.connection.close();

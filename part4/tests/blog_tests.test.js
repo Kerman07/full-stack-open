@@ -4,9 +4,17 @@ const api = supertest(app);
 const helper = require("./blog_helper");
 const mongoose = require("mongoose");
 const Blog = require("../models/blog");
+const User = require("../models/user");
 
 beforeEach(async () => {
   await Blog.deleteMany({});
+  const newUser = {
+    username: "kerman07",
+    name: "Kerimi",
+    password: "weak",
+  };
+
+  await api.post("/api/users").send(newUser);
 
   const blogObjects = helper.initialBlogs.map((blog) => new Blog(blog));
   const promiseArray = blogObjects.map((blog) => blog.save());

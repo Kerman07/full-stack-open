@@ -9,25 +9,17 @@ blogRouter.get("/", async (request, response) => {
 blogRouter.post("/", async (request, response, next) => {
   const blog = new Blog(request.body);
 
-  try {
-    const result = await blog.save();
-    response.status(201).json(result);
-  } catch (exception) {
-    next(exception);
-  }
+  const result = await blog.save();
+  response.status(201).json(result);
 });
 
 blogRouter.put("/:id", async (request, response, next) => {
   const body = request.body;
-  try {
-    const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, body, {
-      new: true,
-      runValidators: true,
-    });
-    response.json(updatedBlog);
-  } catch (exception) {
-    next(exception);
-  }
+  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, body, {
+    new: true,
+    runValidators: true,
+  });
+  response.json(updatedBlog);
 });
 
 blogRouter.delete("/:id", async (request, response) => {

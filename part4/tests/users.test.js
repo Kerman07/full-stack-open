@@ -41,6 +41,37 @@ describe("testing the users api", () => {
     expect(usersAfter).toHaveLength(userHelper.initialUsers.length + 1);
     expect(result.body.password).not.toEqual(newUser.password);
   });
+
+  test("can't create an user if invalid data is provided", async () => {
+    const newUser = {
+      username: "zeko",
+      name: "Zekija",
+      password: "ps",
+    };
+
+    const result = await api
+      .post("/api/users")
+      .send(newUser)
+      .expect(400)
+      .expect("Content-Type", /application\/json/);
+
+    const usersAfter = await userHelper.getAllUsers();
+    expect(result.body.error).toEqual("password must be 3 characters long");
+    expect(usersAfter).toHaveLength(userHelper.initialUsers.length);
+  });
+
+  test("can't create an user with the same username", async () => {
+    const newUser = {
+      username: "kerman07",
+      name: "Kerimi",
+      password: "weak",
+    };
+
+    const result = await api.post("/api/users").send(newUser).expect(400);
+    expect(result.body.error).toEqual("username already exists");
+    const usersAfter = await userHelper.getAllUsers();
+    expect(usersAfter).toHaveLength(userHelper.initialUsers.length);
+  });
 });
 
 afterAll(() => {

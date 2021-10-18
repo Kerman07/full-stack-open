@@ -1,10 +1,18 @@
 const mongoose = require("mongoose");
+const uniqueValidator = require("mongoose-beautiful-unique-validation");
 
 const userSchema = mongoose.Schema({
-  username: { type: String, required: true },
+  username: {
+    type: String,
+    required: true,
+    unique: "Two users cannot share the same username ({VALUE})",
+    minLength: 3,
+  },
   name: String,
-  password: { type: String, required: true },
+  password: String,
 });
+
+userSchema.plugin(uniqueValidator);
 
 userSchema.set("toJSON", {
   transform: (user, returnedUser) => {

@@ -5,17 +5,29 @@ const helper = require("./blog_helper");
 const mongoose = require("mongoose");
 const Blog = require("../models/blog");
 const User = require("../models/user");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+
+let token;
 
 beforeEach(async () => {
-  await Blog.deleteMany({});
-  const newUser = {
-    username: "kerman07",
-    name: "Kerimi",
-    password: "weak",
+  await User.deleteMany({});
+  const passwordHash = await bcrypt.hash("weak", 10);
+  const user = new User({
+    username: "root",
+    name: "Master User",
+    password: passwordHash,
+  });
+
+  await user.save();
+
+  const userForToken = {
+    username: user.username,
+    id: user.id,
   };
+  token = jwt.sign(userForToken, process.env.SECRET);
 
-  await api.post("/api/users").send(newUser);
-
+  await Blog.deleteMany({});
   const blogObjects = helper.initialBlogs.map((blog) => new Blog(blog));
   const promiseArray = blogObjects.map((blog) => blog.save());
 
@@ -41,22 +53,29 @@ describe("when blogs are present", () => {
 
 describe("when saving a new blog", () => {
   test("new blog post is saved successfully with valid data", async () => {
-    const newBlog = { title: "test", author: "test", url: "test", likes: 1 };
+    const newBlog = {
+      title: "test",
+      author: "test",
+      url: "test",
+      likes: 1,
+    };
+
     const returnedBlog = await api
       .post("/api/blogs")
+      .set("Authorization", `bearer ${token}`)
       .send(newBlog)
       .expect(201)
       .expect("Content-Type", /application\/json/);
-
     const blogsAfter = await helper.getAllBlogs();
     expect(blogsAfter).toHaveLength(helper.initialBlogs.length + 1);
     expect(newBlog.url).toEqual(returnedBlog.body.url);
-  });
+  }, 100000);
 
   test("if likes property is missing from request it will default to 0", async () => {
     const newBlog = { title: "test", author: "test", url: "test" };
     const returnedBlog = await api
       .post("/api/blogs")
+      .set("Authorization", `bearer ${token}`)
       .send(newBlog)
       .expect(201)
       .expect("Content-Type", /application\/json/);
@@ -68,9 +87,21 @@ describe("when saving a new blog", () => {
     const newBlog = { author: "test", likes: 5 };
     await api
       .post("/api/blogs")
+      .set("Authorization", `bearer ${token}`)
       .send(newBlog)
       .expect(400)
       .expect("Content-Type", /application\/json/);
+  });
+
+  test("fails with status 401 if token is not provided", async () => {
+    const newBlog = {
+      title: "test",
+      author: "test",
+      url: "test",
+      likes: 1,
+    };
+
+    await api.post("/api/blogs").send(newBlog).expect(401);
   });
 });
 

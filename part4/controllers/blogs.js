@@ -8,17 +8,9 @@ blogRouter.get("/", async (request, response) => {
   response.json(blogs);
 });
 
-const getTokenFromHeader = (request) => {
-  const authorization = request.get("authorization");
-  if (authorization && authorization.toLowerCase().startsWith("bearer "))
-    return authorization.substring(7);
-  return null;
-};
-
 blogRouter.post("/", async (request, response, next) => {
-  const token = getTokenFromHeader(request);
-  const decoded = jwt.verify(token, process.env.SECRET);
-  if (!token || !decoded.id)
+  const decoded = jwt.verify(request.token, process.env.SECRET);
+  if (!decoded.id)
     return response.status(401).json({ error: "invalid or missing token" });
 
   const user = await User.findById(decoded.id);

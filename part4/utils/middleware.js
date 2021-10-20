@@ -21,7 +21,7 @@ const errorHandler = (error, request, response, next) => {
   if (error.name === "MongoServerError")
     return response.status(400).send({ error: "username already exists" });
   if (error.name === "JsonWebTokenError")
-    return response.status(401).send({ error: "invalid token" });
+    return response.status(401).send({ error: "invalid or missing token" });
   next(error);
 };
 

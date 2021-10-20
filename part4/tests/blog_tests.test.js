@@ -28,7 +28,9 @@ beforeEach(async () => {
   token = jwt.sign(userForToken, process.env.SECRET);
 
   await Blog.deleteMany({});
-  const blogObjects = helper.initialBlogs.map((blog) => new Blog(blog));
+  const blogObjects = helper.initialBlogs.map(
+    (blog) => new Blog({ ...blog, user: user.id })
+  );
   const promiseArray = blogObjects.map((blog) => blog.save());
 
   await Promise.all(promiseArray);
@@ -109,7 +111,12 @@ describe("deleting a blog post", () => {
   test("works with a valid id", async () => {
     const blogs = await helper.getAllBlogs();
     const blogToDelete = blogs[0];
-    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .set("Authorization", `bearer ${token}`)
+      .expect(204);
+
     const blogsAfter = await helper.getAllBlogs();
     expect(blogsAfter).toHaveLength(helper.initialBlogs.length - 1);
   });

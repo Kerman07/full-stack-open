@@ -71,7 +71,7 @@ describe("when saving a new blog", () => {
     const blogsAfter = await helper.getAllBlogs();
     expect(blogsAfter).toHaveLength(helper.initialBlogs.length + 1);
     expect(newBlog.url).toEqual(returnedBlog.body.url);
-  }, 100000);
+  });
 
   test("if likes property is missing from request it will default to 0", async () => {
     const newBlog = { title: "test", author: "test", url: "test" };
@@ -93,17 +93,6 @@ describe("when saving a new blog", () => {
       .send(newBlog)
       .expect(400)
       .expect("Content-Type", /application\/json/);
-  });
-
-  test("fails with status 401 if token is not provided", async () => {
-    const newBlog = {
-      title: "test",
-      author: "test",
-      url: "test",
-      likes: 1,
-    };
-
-    await api.post("/api/blogs").send(newBlog).expect(401);
   });
 });
 

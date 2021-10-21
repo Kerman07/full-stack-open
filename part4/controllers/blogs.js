@@ -9,12 +9,11 @@ blogRouter.get("/", async (request, response) => {
 });
 
 blogRouter.post("/", async (request, response, next) => {
-  const decoded = jwt.verify(request.token, process.env.SECRET);
-  if (!decoded.id)
+  if (!request.user)
     return response.status(401).json({ error: "invalid or missing token" });
 
-  const user = await User.findById(decoded.id);
-  const blog = new Blog({ ...request.body, user: user.id });
+  const user = await User.findById(request.user);
+  const blog = new Blog({ ...request.body, user: request.user });
   const result = await blog.save();
   user.blogs = user.blogs.concat(result);
   await user.save();
@@ -31,10 +30,9 @@ blogRouter.put("/:id", async (request, response, next) => {
 });
 
 blogRouter.delete("/:id", async (request, response) => {
-  const decoded = jwt.verify(request.token, process.env.SECRET);
-  const userId = decoded.id;
+  const user = request.user;
   const blog = await Blog.findById(request.params.id);
-  if (blog.user.toString() === userId.toString()) {
+  if (blog.user.toString() === user.toString()) {
     await Blog.findByIdAndRemove(request.params.id);
     return response.status(204).end();
   }

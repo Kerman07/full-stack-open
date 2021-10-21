@@ -94,6 +94,17 @@ describe("when saving a new blog", () => {
       .expect(400)
       .expect("Content-Type", /application\/json/);
   });
+
+  test("fails with status 401 if token is not provided", async () => {
+    const newBlog = {
+      title: "test",
+      author: "test",
+      url: "test",
+      likes: 1,
+    };
+
+    await api.post("/api/blogs").send(newBlog).expect(401);
+  });
 });
 
 describe("deleting a blog post", () => {

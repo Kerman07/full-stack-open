@@ -3,6 +3,7 @@ import Blog from "./components/Blog";
 import NewBlogForm from "./components/NewBlogForm";
 import LoginForm from "./components/LoginForm";
 import LogoutForm from "./components/LogoutForm";
+import Notification from "./components/Notification";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 
@@ -14,6 +15,7 @@ const App = () => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
+  const [notification, setNotification] = useState(["", ""]);
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -28,13 +30,18 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault();
-    const user = await loginService.login({ username, password });
-    if (user) {
+    try {
+      const user = await loginService.login({ username, password });
       window.localStorage.setItem("loggedUser", JSON.stringify(user));
       blogService.setToken(user.token);
       setUsername("");
       setPassword("");
       setUser(user);
+    } catch (exception) {
+      setNotification(["wrong username or password", "failure"]);
+      setTimeout(() => {
+        setNotification(["", ""]);
+      }, 6000);
     }
   };
 
@@ -45,19 +52,30 @@ const App = () => {
 
   const createBlog = async (event) => {
     event.preventDefault();
-    blogService.setToken(user.token);
-    const result = await blogService.create({ title, author, url });
-    blogService.setToken(user.token);
-    setTitle("");
-    setAuthor("");
-    setUrl("");
-    setBlogs(blogs.concat(result));
+    try {
+      blogService.setToken(user.token);
+      const result = await blogService.create({ title, author, url });
+      setTitle("");
+      setAuthor("");
+      setUrl("");
+      setBlogs(blogs.concat(result));
+      setNotification([`a new blog ${title} by ${author} added`, "success"]);
+      setTimeout(() => {
+        setNotification(["", ""]);
+      }, 6000);
+    } catch (exception) {
+      setNotification(["title and url are required", "failure"]);
+      setTimeout(() => {
+        setNotification(["", ""]);
+      }, 6000);
+    }
   };
 
   if (user === null) {
     return (
       <div>
         <h2>Log in to the application</h2>
+        <Notification notification={notification} />
         <LoginForm
           username={username}
           setUsername={setUsername}
@@ -71,6 +89,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+      <Notification notification={notification} />
       <p>
         {user.name} logged in <LogoutForm handleLogout={handleLogout} />
       </p>

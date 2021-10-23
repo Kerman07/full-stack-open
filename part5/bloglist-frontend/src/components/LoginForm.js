@@ -9,7 +9,7 @@ const LoginForm = ({
     <div>
       <form>
         <div>
-          username
+          username: 
           <input
             type="text"
             name="Username"
@@ -18,7 +18,7 @@ const LoginForm = ({
           ></input>
         </div>
         <div>
-          password
+          password: 
           <input
             type="password"
             name="Password"

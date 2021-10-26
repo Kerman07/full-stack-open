@@ -9,6 +9,7 @@ const NewBlogForm = ({
 }) => {
   return (
     <>
+      <h2>create new</h2>
       <div>
         title:
         <input

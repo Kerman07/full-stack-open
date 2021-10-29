@@ -8,6 +8,10 @@ import blogService from "./services/blogs";
 import loginService from "./services/login";
 import Togglable from "./components/Togglable";
 
+const sortBlogs = (blogs) => {
+  return blogs.sort((a, b) => b.likes - a.likes);
+};
+
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
@@ -18,7 +22,10 @@ const App = () => {
   const blogFormRef = useRef();
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
+    blogService.getAll().then((blogs) => {
+      sortBlogs(blogs);
+      setBlogs(blogs);
+    });
   }, []);
 
   useEffect(() => {
@@ -55,7 +62,8 @@ const App = () => {
       blogService.setToken(user.token);
       const result = await blogService.create(blogObject);
       blogFormRef.current.toggleVisibility();
-      setBlogs(blogs.concat(result));
+      const sortedBlogs = sortBlogs(blogs.concat(result));
+      setBlogs(sortedBlogs);
       setNotification([
         `a new blog ${result.title} by ${result.author} added`,
         "success",
@@ -73,7 +81,10 @@ const App = () => {
 
   const handleLike = async (blogObject) => {
     const returned = await blogService.updateLikes(blogObject);
-    setBlogs(blogs.map((blog) => (blog.id === returned.id ? returned : blog)));
+    const sortedBlogs = sortBlogs(
+      blogs.map((blog) => (blog.id === returned.id ? returned : blog))
+    );
+    setBlogs(sortedBlogs);
   };
 
   if (user === null) {

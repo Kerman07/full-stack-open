@@ -80,11 +80,22 @@ const App = () => {
   };
 
   const handleLike = async (blogObject) => {
+    blogService.setToken(user.token);
     const returned = await blogService.updateLikes(blogObject);
     const sortedBlogs = sortBlogs(
       blogs.map((blog) => (blog.id === returned.id ? returned : blog))
     );
     setBlogs(sortedBlogs);
+  };
+
+  const handleDelete = async (blogObject) => {
+    if (
+      window.confirm(`Remove blog ${blogObject.title} by ${blogObject.author}`)
+    ) {
+      blogService.setToken(user.token);
+      await blogService.remove(blogObject);
+      setBlogs(blogs.filter((blog) => blog.id !== blogObject.id));
+    }
   };
 
   if (user === null) {
@@ -113,7 +124,13 @@ const App = () => {
         <NewBlogForm createBlog={createBlog} />
       </Togglable>
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} handleLike={handleLike} />
+        <Blog
+          key={blog.id}
+          blog={blog}
+          handleLike={handleLike}
+          handleDelete={handleDelete}
+          user={user}
+        />
       ))}
     </div>
   );

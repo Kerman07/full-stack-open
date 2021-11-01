@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import React from "react";
 
 const Notification = ({ notification }) => {
   if (notification === ["", ""]) return null;

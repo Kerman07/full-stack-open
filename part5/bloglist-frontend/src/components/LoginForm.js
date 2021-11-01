@@ -1,3 +1,5 @@
+import React from "react";
+
 const LoginForm = ({
   username,
   setUsername,
@@ -9,7 +11,7 @@ const LoginForm = ({
     <div>
       <form>
         <div>
-          username: 
+          username:
           <input
             type="text"
             name="Username"
@@ -18,7 +20,7 @@ const LoginForm = ({
           ></input>
         </div>
         <div>
-          password: 
+          password:
           <input
             type="password"
             name="Password"
@@ -26,7 +28,9 @@ const LoginForm = ({
             onChange={({ target }) => setPassword(target.value)}
           ></input>
         </div>
-        <button type="submit" onClick={handleLogin}>Login</button>
+        <button type="submit" onClick={handleLogin}>
+          Login
+        </button>
       </form>
     </div>
   );

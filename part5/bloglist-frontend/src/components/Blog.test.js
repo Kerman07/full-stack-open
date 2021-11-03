@@ -27,4 +27,11 @@ describe("testing <Blog />", () => {
     const blogDetail = component.container.querySelector(".blog-detail");
     expect(blogDetail).toHaveStyle("display: none");
   });
+
+  test("the blog's url and number of likes are shown when the button to show details has been clicked", () => {
+    const button = component.getByText("view");
+    fireEvent.click(button);
+    const blogDetail = component.container.querySelector(".blog-detail");
+    expect(blogDetail).not.toHaveStyle("display: none");
+  });
 });

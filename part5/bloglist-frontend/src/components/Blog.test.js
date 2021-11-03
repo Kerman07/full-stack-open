@@ -4,7 +4,7 @@ import { render, fireEvent } from "@testing-library/react";
 import Blog from "./Blog";
 
 describe("testing <Blog />", () => {
-  let component;
+  let component, handleLike;
   beforeEach(() => {
     const blog = {
       title: "title",
@@ -18,7 +18,10 @@ describe("testing <Blog />", () => {
     const user = {
       username: "kerman07",
     };
-    component = render(<Blog blog={blog} user={user} />);
+    handleLike = jest.fn();
+    component = render(
+      <Blog blog={blog} user={user} handleLike={handleLike} />
+    );
   });
 
   test("renders the title and author, but not its url or number of likes by default", () => {
@@ -33,5 +36,12 @@ describe("testing <Blog />", () => {
     fireEvent.click(button);
     const blogDetail = component.container.querySelector(".blog-detail");
     expect(blogDetail).not.toHaveStyle("display: none");
+  });
+
+  test(" if the like button is clicked twice, the event handler the component received as props is called twice", () => {
+    const likeButton = component.getByText("like");
+    fireEvent.click(likeButton);
+    fireEvent.click(likeButton);
+    expect(handleLike.mock.calls).toHaveLength(2);
   });
 });

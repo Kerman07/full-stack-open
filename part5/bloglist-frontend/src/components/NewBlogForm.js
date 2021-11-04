@@ -5,14 +5,14 @@ const NewBlogForm = ({ createBlog }) => {
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
 
-  const handleCreate = async (event) => {
+  const handleCreate = (event) => {
     event.preventDefault();
     try {
-      await createBlog({ title, author, url });
+      createBlog({ title, author, url });
       setTitle("");
       setAuthor("");
       setUrl("");
-    } catch (e) {}
+    } catch {}
   };
 
   return (
@@ -22,6 +22,7 @@ const NewBlogForm = ({ createBlog }) => {
         title:
         <input
           type="text"
+          id="title"
           value={title}
           onChange={({ target }) => setTitle(target.value)}
         ></input>
@@ -30,6 +31,7 @@ const NewBlogForm = ({ createBlog }) => {
         author:
         <input
           type="text"
+          id="author"
           value={author}
           onChange={({ target }) => setAuthor(target.value)}
         ></input>
@@ -38,6 +40,7 @@ const NewBlogForm = ({ createBlog }) => {
         url:
         <input
           type="text"
+          id="url"
           value={url}
           onChange={({ target }) => setUrl(target.value)}
         ></input>

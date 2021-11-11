@@ -12,7 +12,9 @@ const NewBlogForm = ({ createBlog }) => {
       setTitle("");
       setAuthor("");
       setUrl("");
-    } catch {}
+    } catch (ex) {
+      // continue regardless of exception
+    }
   };
 
   return (

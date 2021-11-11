@@ -9,7 +9,7 @@ const LoginForm = ({
 }) => {
   return (
     <div>
-      <form>
+      <form id="login-form">
         <div>
           username:
           <input

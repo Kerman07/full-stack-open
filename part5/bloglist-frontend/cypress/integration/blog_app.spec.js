@@ -34,4 +34,21 @@ describe("Blog app", function () {
       );
     });
   });
+
+  describe("When logged in", function () {
+    beforeEach(function () {
+      cy.login({ username: "kerman07", password: "weak" });
+    });
+
+    it("A blog can be created", function () {
+      cy.contains("Create new Blog").click();
+      cy.get("#title").type("mock");
+      cy.get("#author").type("test");
+      cy.get("#url").type("test");
+      cy.contains("Create").click();
+
+      cy.contains("a new blog mock by test added");
+      cy.contains("mock test");
+    });
+  });
 });

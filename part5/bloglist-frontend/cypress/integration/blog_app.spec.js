@@ -35,7 +35,7 @@ describe("Blog app", function () {
     });
   });
 
-  describe("When logged in", function () {
+  describe("When logged in ", function () {
     beforeEach(function () {
       cy.login({ username: "kerman07", password: "weak" });
     });
@@ -49,6 +49,21 @@ describe("Blog app", function () {
 
       cy.contains("a new blog mock by test added");
       cy.contains("mock test");
+    });
+
+    describe("and blogs are present", function () {
+      beforeEach(function () {
+        cy.createBlog({ title: "blog1", author: "kera", url: "test" });
+        cy.createBlog({ title: "blog2", author: "keroni", url: "test" });
+        cy.createBlog({ title: "blog3", author: "kerisimus", url: "test" });
+      });
+
+      it.only("can like a blog", function () {
+        cy.contains("likes 0");
+        cy.contains("view").click();
+        cy.contains("likes 0").contains("like").click();
+        cy.contains("likes 1");
+      });
     });
   });
 });

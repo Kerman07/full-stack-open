@@ -58,11 +58,29 @@ describe("Blog app", function () {
         cy.createBlog({ title: "blog3", author: "kerisimus", url: "test" });
       });
 
-      it.only("can like a blog", function () {
-        cy.contains("likes 0");
+      it("can like a blog", function () {
         cy.contains("view").click();
         cy.contains("likes 0").contains("like").click();
         cy.contains("likes 1");
+      });
+
+      it("can delete a blog created by same user", function () {
+        cy.contains("view").click();
+        cy.contains("remove");
+      });
+
+      it("can't delete a blog created by other user", function () {
+        cy.contains("Logout").click();
+        const user2 = {
+          username: "nekky",
+          name: "Nermina",
+          password: "weak",
+        };
+        cy.request("POST", "http://localhost:3003/api/users", user2);
+        cy.login({ username: "nekky", password: "weak" });
+
+        cy.contains("view").click();
+        cy.contains("remove").should("not.exist");
       });
     });
   });

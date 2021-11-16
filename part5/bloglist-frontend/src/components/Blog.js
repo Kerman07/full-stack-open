@@ -14,7 +14,7 @@ const Blog = ({ blog, handleLike, handleDelete, user }) => {
   const showWhenVisible = { display: visible ? "" : "none" };
 
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} className="blog">
       <div className="title-author">
         {blog.title} {blog.author}{" "}
       </div>

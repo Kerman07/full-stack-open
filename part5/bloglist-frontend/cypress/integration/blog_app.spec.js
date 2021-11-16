@@ -53,9 +53,25 @@ describe("Blog app", function () {
 
     describe("and blogs are present", function () {
       beforeEach(function () {
-        cy.createBlog({ title: "blog1", author: "kera", url: "test" });
-        cy.createBlog({ title: "blog2", author: "keroni", url: "test" });
-        cy.createBlog({ title: "blog3", author: "kerisimus", url: "test" });
+        cy.createBlog({
+          title: "blog1",
+          author: "kera",
+          url: "test",
+          likes: 2,
+        });
+        cy.createBlog({
+          title: "blog2",
+          author: "keroni",
+          url: "test",
+          likes: 3,
+        });
+        cy.createBlog({
+          title: "blog3",
+          author: "kerisimus",
+          url: "test",
+          likes: 1,
+        });
+        cy.wait(200);
       });
 
       it("can like a blog", function () {
@@ -81,6 +97,22 @@ describe("Blog app", function () {
 
         cy.contains("view").click();
         cy.contains("remove").should("not.exist");
+      });
+
+      it("blogs are ordered by the number of likes", function () {
+        cy.contains("blog2").parent().contains("view").click();
+        cy.contains("blog2").parent().contains("like").click();
+        cy.contains("blog2").parent().contains("like").click();
+        cy.contains("view").click();
+        cy.contains("likes 0").contains("like").click();
+
+        cy.get(".blog").then((blogs) => {
+          let ans = "";
+          for (let blog of blogs) {
+            ans += blog.innerText.split(" ")[0];
+          }
+          expect(ans).to.equal("blog2blog1blog3");
+        });
       });
     });
   });

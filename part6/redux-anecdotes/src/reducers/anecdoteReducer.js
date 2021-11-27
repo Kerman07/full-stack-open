@@ -5,6 +5,7 @@ const anecdotesAtStart = [
   "Any fool can write code that a computer can understand. Good programmers write code that humans can understand.",
   "Premature optimization is the root of all evil.",
   "Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.",
+  "Programming isn't about what you know; it's about what you can figure out.",
 ];
 
 const getId = () => (100000 * Math.random()).toFixed(0);

@@ -22,9 +22,12 @@ const anecdoteReducer = (state = [], action) => {
 };
 
 export const castVote = (id) => {
-  return {
-    type: "VOTE",
-    data: { id },
+  return async (dispatch) => {
+    const voted = await anecdoteService.newVote(id);
+    dispatch({
+      type: "VOTE",
+      data: { id: voted.id },
+    });
   };
 };
 

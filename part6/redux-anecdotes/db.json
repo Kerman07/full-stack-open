@@ -9,6 +9,11 @@
       "content": "keroni is back",
       "votes": 0,
       "id": 2
+    },
+    {
+      "content": "this is a new note",
+      "votes": 0,
+      "id": 3
     }
   ]
 }

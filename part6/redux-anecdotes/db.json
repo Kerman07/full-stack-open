@@ -2,7 +2,7 @@
   "anecdotes": [
     {
       "content": "this is a new note",
-      "votes": 1,
+      "votes": 2,
       "id": 1
     },
     {
@@ -24,6 +24,11 @@
       "content": "today Senegal will win",
       "votes": 1,
       "id": 5
+    },
+    {
+      "content": "using connect with redux",
+      "votes": 0,
+      "id": 6
     }
   ]
 }

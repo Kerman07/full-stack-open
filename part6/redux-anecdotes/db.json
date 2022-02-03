@@ -2,12 +2,12 @@
   "anecdotes": [
     {
       "content": "this is a new note",
-      "votes": 2,
+      "votes": 4,
       "id": 1
     },
     {
       "content": "keroni is back",
-      "votes": 2,
+      "votes": 5,
       "id": 2
     },
     {
@@ -29,6 +29,11 @@
       "content": "using connect with redux",
       "votes": 0,
       "id": 6
+    },
+    {
+      "content": "created with connect active",
+      "votes": 0,
+      "id": 7
     }
   ]
 }

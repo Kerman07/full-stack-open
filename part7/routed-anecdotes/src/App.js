@@ -84,14 +84,9 @@ const Notification = ({ content }) => {
 };
 
 const CreateNew = (props) => {
-  const content = useField("text");
-  const author = useField("text");
-  const info = useField("text");
-
-  const removeProp = "reset";
-  const { [removeProp]: _, ...content_input } = content;
-  const { [removeProp]: __, ...author_input } = author;
-  const { [removeProp]: ___, ...info_input } = info;
+  const { reset: contentReset, ...content } = useField("text");
+  const { reset: authorReset, ...author } = useField("text");
+  const { reset: infoReset, ...info } = useField("text");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -105,9 +100,9 @@ const CreateNew = (props) => {
 
   const resetFields = (e) => {
     e.preventDefault();
-    content.reset();
-    author.reset();
-    info.reset();
+    contentReset();
+    authorReset();
+    infoReset();
   };
 
   return (
@@ -116,15 +111,15 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input name="content" {...content_input} />
+          <input name="content" {...content} />
         </div>
         <div>
           author
-          <input name="author" {...author_input} />
+          <input name="author" {...author} />
         </div>
         <div>
           url for more info
-          <input name="info" {...info_input} />
+          <input name="info" {...info} />
         </div>
         <button>create</button>
         <button onClick={resetFields}>reset</button>
